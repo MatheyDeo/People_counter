@@ -47,28 +47,13 @@ LOST_TIME = 1.5
 # ESP32 SETTINGS
 # ============================================================
 
-# Set this to a specific port if automatic detection does not
-# select the correct device.
-#
-# Windows:
-# ESP32_PORT = "COM3"
-#
-# Linux:
-# ESP32_PORT = "/dev/ttyUSB0"
-#
-# macOS:
-# ESP32_PORT = "/dev/cu.usbserial-0001"
-#
-# None enables automatic port detection.
-ESP32_PORT = None
+ESP32_PORT = COM3
 
 ESP32_BAUD_RATE = 115200
 
 ESP32_RECONNECT_INTERVAL = 3.0
 ESP32_BOOT_WAIT = 2.0
 ESP32_HANDSHAKE_TIMEOUT = 2.0
-
-# Request temperature and humidity every five seconds.
 ESP32_TELEMETRY_INTERVAL = 5.0
 
 MAX_DISPLAY_VISITOR_COUNT = 99999
@@ -125,18 +110,15 @@ class ESP32Bridge:
         self.temperature = None
         self.humidity = None
 
-        # Monotonic timestamp used for displaying telemetry age.
         self.telemetry_received_at = None
-
-        # Newly received telemetry samples waiting to be saved.
         self.pending_telemetry_samples = deque()
 
         self.last_telemetry_error = None
 
         if not SERIAL_AVAILABLE:
             print(
-                "Warning: PySerial is not installed. "
-                "ESP32 communication is disabled."
+                "Warning: PySerial not installed. "
+                "ESP32 communication is disabled. :("
             )
 
     # --------------------------------------------------------
@@ -224,8 +206,7 @@ class ESP32Bridge:
             self.ping_sent = False
             self.ping_deadline = 0.0
 
-            # Force the current visitor count to be sent after
-            # the connection has been verified.
+            # Force the current visitor count to be sent after the connection has been verified.
             self.last_sent_visitor_count = None
 
             current_time = time.monotonic()
@@ -645,7 +626,6 @@ def ensure_database_column(
 ):
     """
     Add a column if it does not already exist.
-
     The table and column names passed here are constants from
     this program, not external user input.
     """
@@ -1374,10 +1354,9 @@ finally:
     # ========================================================
     # CLEANUP
     # ========================================================
-
     esp32.close()
     camera.release()
     cv2.destroyAllWindows()
     database.close()
 
-    print("Program closed.")
+    print("Program closed, see ya later.")
